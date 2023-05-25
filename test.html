@@ -1,0 +1,29 @@
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+  </head>
+  <input type="text" id="inpVal" />
+  <button onclick="getGe()">genetate</button>
+  <body>
+    <script>
+      function shuffleText(text) {
+        var shuffled = "";
+        text = text.split("");
+        while (text.length > 0) {
+          shuffled += text.splice(Math.floor(Math.random() * text.length), 1);
+          //   console.log(shuffled, "shuffled");
+        }
+        return shuffled;
+      }
+      function getGe() {
+        let text = document.getElementById("inpVal").value;
+        //   var text = "James";
+        var shuffledText = shuffleText(text);
+        console.log(shuffledText);
+      }
+    </script>
+  </body>
+</html>

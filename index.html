@@ -1,0 +1,395 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Card Generating </title>
+    <link rel="stylesheet" href="bootstrap.css">
+</head>
+<body>
+    <style>
+        *{
+            padding: 0;
+            margin: 0;
+        }
+        .header{
+            width: 100%;
+            height: 100px;
+            background-color: orange;
+            transition: all 2s ease;
+        }
+        .head{
+            border: 3px solid black;
+            height: 50vh;
+            max-width: 90%;
+            margin-left: 5%;
+            
+        }
+        .tablee{
+            width: 45%;
+        }
+        .table{
+            border: 2px solid black;
+            margin-top: 6px;
+        }
+        select, input{
+            width: 100%;
+            height: 40px;
+            margin: 10px 20px;
+            outline: none;
+        }
+        .head{
+            display: flex;
+            justify-content: space-around;
+        }
+        .amount{
+            border-left: 3px solid black;
+            height: 49vh;
+        }
+        .butt{
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        button{
+            width: 30%;
+            height: 40px;
+            border: none;
+            color: white;
+            margin: 10px;
+        }
+        h6{
+            border: 1.5px solid black;
+            height: 40px;
+            margin-left: 20px;
+            width: 100%;
+            padding: 10px;
+        }
+        .pop{
+            position: absolute;
+            top: 0%;
+            left: 20px;
+            width: 600px;
+            height: 300px;
+            background-color: grey;
+            border-radius: 10px;
+            z-index: 1999;
+            color: white;
+        }
+        .pop button{
+           position: absolute;
+           left: 20%;
+           top: 50%;color: white;
+        }
+        .table{
+            width: 90%;
+            margin-left: 80px;
+        }
+        .succe{
+           position: absolute;
+           left: 20%;
+           top: 20%;
+            width: 60%;
+            font-size: 25px;
+        }
+        .move{
+            width: 50px;
+            font-size: 13px;
+        }
+    </style>
+
+
+    <body id="body">
+        <div class="header" id="header">
+            <h1 id="h1" style="display: flex; align-items: center; justify-content: center; color: white;">Welcome? load your recharge card</h1>
+        </div>
+        <div class="head">
+            <div class="tablee">
+    
+            <div class="network" >
+                <h4>Choose Network</h4>
+                <select class="form-control" name="select Card" id="selector">
+                    <option disabled value="Buy-card">Buy Card</option>
+                    <option value="MTN">MTN</option>
+                    <option value="AIRTEL">AIRTEL</option>
+                    <option value="GLO">GLO</option>
+                    <option value="ETISALAT">ETISALAT</option>
+                </select>
+             </div>
+   
+             <div class="network">
+                <h4>Choose Amount</h4>
+                 <select class="form-control" name="" id="amount_selector">
+                    <option disabled value="Buy-card">Buy Card</option>
+                    <option value="50">50</option>
+                    <option value="100">100</option>
+                    <option value="200">200</option>
+                    <option value="500">500</option>
+                    <option value="1000">1000</option>
+                 </select>
+             </div>
+            <h4>Generate Pin</h4>
+             <div class="card-generator">
+                <h6 id="demo"></h6>
+             </div>
+    
+    
+             <div class="butt">
+                <button onclick="genetate()" class="btn btn-success">GENERATE PIN</button><br>
+                <button disabled onclick="save()" id="disa" class="btn btn-warning">SAVE PIN</button>
+             </div>
+    
+            </div>
+    
+    
+            <div class="tablee">
+                <div style="position: relative;" class="amount">
+                       <input class="form-control"  type="text" id="subm" placeholder="ENTER YOUR CARD">
+                       <div id="message"></div>
+                       <button onclick="successRecharge()" style="width: 50%;" class="btn btn-success">RECHARGE CARD</button>
+                 </div>
+            </div>
+        </div>
+    
+    <h1 style="display: flex; align-items: center; justify-content: center;">History</h1>
+    
+    
+        <table class="table table-stripe">
+            <thead>
+                <td>S/N</td>
+                <td>NETWORK PROVIDER</td>
+                <td>DATE PRINTED</td>
+                <td>AMOUNT</td>
+                <td>PIN</td>
+                <td>PRINTREF</td>
+                <td>STATUS</td>
+                <td>Delete</td>
+               <!--  <td>Delete</td> -->
+            </thead>
+
+            <div class="cont">
+                <tbody id="showing">
+
+                </tbody>
+            </div>
+            
+      </table>
+    </div>
+
+
+    <script>
+      /*   let days=['wow', 67, 'shole']
+        console.log(days.includes('wo')) */
+
+let seen=false
+let index=0
+let show=[]
+let sees=false;
+let Status='Unused'
+let codes={MTN:'*555*', AIRTEL:'*126*', GLO:'*999*', ETISALAT:'*123*'};
+
+
+
+        let saved=localStorage.getItem('show')
+        if(saved){
+            show=JSON.parse(saved)
+            display()
+        }
+
+
+
+        disa=document.getElementById('disa')
+        function genetate(){
+            demo.innerHTML=''
+            let a;
+            for (let index = 0; index < 12; index++) {
+            a=Math.floor(Math.random()*6);
+                document.getElementById('demo').innerHTML+=a
+            }
+            disa.disabled=false
+        };
+
+        function save(){    
+            let c_selector= selector.value;
+            alert(c_selector)
+            let c_amount= amount_selector.value;
+            let c_demo= demo.innerHTML;
+            let c_date= new Date().toLocaleDateString();
+            let recharge=`${codes[c_selector]}${c_demo}#`
+            let Status ='unused'
+            //all objexct Element
+            let newElement={Network:c_selector, amount:c_amount,REF:c_demo, date:c_date, scrach:recharge, Status:Status}
+
+            show.push(newElement)
+            localStorage.setItem('show',JSON.stringify(show))
+            display()
+        }
+
+
+    function display(){
+            showing.innerHTML=''
+         if (show) {
+            show.forEach((element,i) => {
+                showing.innerHTML+=`<tr>
+                    <td>${i+1}</td>
+                    <td>${element.Network}</td>
+                    <td id='date'>${new Date().toLocaleDateString()}</td>
+                    <td>${element.amount}</td>
+                    <td>${element.REF} </td>
+                    <td id="reference">${element.scrach}</td>
+                    <td id='status${i}'>${element.Status}</td>
+                   <td id='off' onclick="del(${i})" class='btn btn-warning color text-green'>Delete</td> 
+                    </tr>`
+            });
+         }
+        }
+        display()
+
+        var ref=document.getElementById('reference')
+        
+        function move(){
+            subm.value.push(ref.value)
+           display()
+    }
+
+        
+        let off=document.getElementById('off')
+        function del(i){
+           let box= off.value
+           show.splice(i,1)
+           localStorage.setItem('show',JSON.stringify(show))
+
+           display()
+        }
+
+                //SUBMIT PAGE
+pop=document.getElementById('pop')
+succe=document.getElementById('succe')
+message=document.getElementById('message')
+subm=document.getElementById('subm')
+//Status=document.getElementById('Status')
+
+      
+let mycards=JSON.parse(localStorage.getItem('show'))
+function successRecharge(params){
+    
+    if(subm.value === '' ){
+        message.innerHTML =`<div class='pop' id='pop'>
+        <h2 class='succe' id='succe'>Invalid?? Please input your valid pin</h2>
+        <button onclick="ok()" class='btn btn-warning'>OK</button>
+        </div>` 
+        return
+     }
+
+
+     localStorage.setItem('show', JSON.stringify(show))
+      
+       /*  show.forEach((elem, i) => {
+         if(subm.value != show[i].scrach){
+            seen=true
+            console.log('working')
+            
+            setTimeout(() => {
+                seen=false;
+            }, 1000);
+            return
+        }
+       
+        else if(i == seen ==false){
+            console.log('not working')
+        }
+    }); */
+    // for (let i = 0; i < show.length; i++) {
+    //    if(show[i].scrach != subm.value){
+    //         seen =true
+
+    //         console.log('working')
+
+    //         setTimeout(() => {
+    //             seen=false;
+    //         }, 1000);
+
+
+    //    }
+    //    else if(i === show[i] && seen==false && sumb.value===show[i].scrach ){
+    //        console.log('ok')
+
+    //    }
+        
+    // }
+    let hold=true
+    
+     
+  
+
+     
+        let mycards=JSON.parse(localStorage.getItem('show'))
+        localStorage.setItem('show', JSON.stringify(show))
+            mycards.forEach((element, i) => {
+                
+                if (subm.value.trim()==show[i].scrach) {
+                    hold=false
+                    if (show[i].Status=='Used' ) {
+                        message.innerHTML =`<div class='pop' id='pop'>
+                        <h2 class='succe' id='succe'>This card has already been use by you</h2>
+                        <button onclick="ok()" class='btn btn-warning'>OK</button>
+                        </div>` 
+                        setTimeout(() => {
+                            hold=true
+                        }, 100);
+                    }
+                  
+                    else{
+                        setTimeout(() => {
+                        message.innerHTML =`<div class='pop' id='pop'>
+                        <h2 class='succe' id='succe'>You have successfully load ${amount_selector.value} ${selector.value} Scrash Card</h2>
+                        <button onclick="ok()" class='btn btn-warning'>OK</button>
+                        </div>` 
+                        show[i].Status='Used'
+                        localStorage.setItem('show', JSON.stringify(show))
+                        display()
+                    }, 2000);
+                    }
+                    
+                }else if(hold === true && i===mycards.length-1) {
+                    message.innerHTML =`<div class='pop' id='pop'>
+                        <h2 class='succe' id='succe'>Your Pin is Invalid</h2>
+                        <button onclick="ok()" class='btn btn-warning'>OK</button>
+                        </div>` 
+                }
+            });
+    }
+
+console.log(show)
+  
+    //OK SUBMIT PAGE 
+    function ok(){
+        message.innerHTML=''
+            subm.innerHTML=''
+        }
+
+ 
+
+        
+
+
+
+
+
+/* let pin='453140113411'
+let found=false
+function loader(){
+    let mycards=JSON.parse(localStorage.getItem('show'))
+   
+    mycards.forEach(element => {
+        element.REF==pin?found=true:''
+    });
+
+    alert(found)
+    console.log(mycards)
+}
+
+loader() */
+    </script>
+   

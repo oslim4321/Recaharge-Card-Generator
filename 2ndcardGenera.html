@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <link rel="stylesheet" href="bootstrap.css">
+</head>
+<body>
+    <div class="container mt-5">
+
+    <input class="form-control w-50 mb-3" type="text" placeholder="ENTER NETWORK" id="network">
+    <input class="form-control w-50" type="text" placeholder="ENTER AMOUNT" id="amount">
+    <button onclick="add()" class="btn btn-dark">Move</button>
+</div>
+<table class="table table-stripe">
+    <thead >
+        <td>S/N</td>
+        <td>NETWORK PROVIDER</td>
+        <td>DATE PRINTED</td>
+        <td>AMOUNT</td>
+        <td>PIN</td>
+        <td>PRINTREF</td>
+        <td>STATUS</td>
+    </thead>
+
+    <tbody id="showing">
+
+    </tbody>
+</table>
+
+
+<script>
+    let codes={MTN:'*555*', AIRTEL:'*126*', GLO:'*999*', ETISALAT:'*123*'};
+    let show=[];
+    function add(){
+        let c_amount=amount.value;
+        let c_network=network.value;
+        let newcard={amount: c_amount, provider:c_network}
+        show.push(newcard)
+        localStorage.setItem('show',JSON.stringify(show))
+        display()
+    }
+
+    function display(){
+        let ref =Math.floor(1234567890+Math.random()*1234567890)
+        showing.innerHTML=''
+        show.forEach((element, i) => {
+            console.log(element)
+            showing.innerHTML+=`<tr>
+            <td>${i+1}</td>
+            <td>${element.provider}</td>
+            <td>${new Date().toLocaleDateString()}</td>
+            <td>${element.amount}</td>
+            <td>${ref}</td>
+            <td>${codes[element.provider]}${ref}#</td>
+            </tr>`
+        }); 
+        
+    }
+  //  display()
+
+        let saved=localStorage.getItem('show')
+        if(saved){
+            show=JSON.parse(saved)
+            display()
+        }
+      
+
+</script>
+
+
+<!-- <script>
+    let content=[]
+    function add(){
+      let c_network = network.value;
+      let c_amount=amount.value;
+      let arr={sims:c_network, amount:c_amount}
+      content.push(arr)
+      display()
+    }
+
+    function display(){
+        showing.innerHTML=''
+        content.forEach((element,i) => {
+            showing.innerHTML+=`<tr>
+            <td>${i+1}</td>
+            <td>${element.network}</td>
+            <td>${new Date().toLocaleDateString()}</td>
+            <td>${element.amount}</td>
+            <td></td>
+            <td></td>
+            <td></td>
+            </tr>`
+        });
+       
+    } -->
+
+
+
+</script>
+
+
+
+</body>
+</html>
